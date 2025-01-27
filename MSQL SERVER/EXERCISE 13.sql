@@ -13,8 +13,33 @@ Hint: You are comparing data from two different sources (sales vs purchases), so
 
 */
 
+with step1 as(
+SELECT OrderMonth=MONTH(OrderDate)
+		,OrderYear=YEAR(OrderDate) 
+		, TotalDue
+
+		,OrderRank=ROW_NUMBER() over(partition by  Year(OrderDate), Month(OrderDate) Order by TotalDue desc)
 
 
+		FROM SALES.SalesOrderHeader
 
+		--order by YEAR(OrderDate), MONTH(OrderDate)
+),
+
+step2 as(
+	SELECT OrderYear
+			,OrderMonth
+			,MoNtlyTotalDueExcludingOutliers=SUM(TotalDue)
+	from step1
+	where OrderRank>10
+	group by OrderYear
+			, OrderMonth
+	)
+
+select * from step2
+	order by OrderYear
+			,OrderMonth;
+
+--select * from sales.SalesOrderHeader
 
 

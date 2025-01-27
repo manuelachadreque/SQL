@@ -9,13 +9,3 @@ Resources for this lecture
 
 */
 
-
-/*
-
-
-*/
-
-/*
-
-
-*/
